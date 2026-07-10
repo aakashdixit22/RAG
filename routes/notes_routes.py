@@ -83,7 +83,7 @@ def _delete_file_if_exists(file_path):
 
 
 def _parse_note_input():
-    """Read title/content/file from either a JSON body or a multipart form."""
+    
     if request.content_type and "multipart/form-data" in request.content_type:
         title = request.form.get("title")
         content = request.form.get("content")
