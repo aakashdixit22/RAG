@@ -1,7 +1,7 @@
-# Note-Taking RAG API
+# Smart Notes RAG API
 
 A Flask REST API for a note-taking app: JWT auth, notes CRUD, PDF/TXT upload with
-text extraction, and a question-answering endpoint backed by a hand-rolled
+text extraction, and a question-answering endpoint
 Retrieval-Augmented Generation pipeline (chunking → embedding → cosine-similarity
 retrieval → grounded generation) — no vector DB and no retrieval framework
 (e.g. LangChain) involved.
