@@ -67,7 +67,29 @@ python run.py
 
 Runs on `http://127.0.0.1:5000`. If a request that should work returns `404 Not Found`, check whether an old `python run.py` process is still running in the background and holding the port — kill it before starting a fresh one, otherwise your requests may randomly hit the stale process.
 
-## 1. Login (or Register if you don't have an account yet)
+## 1. Register (first time) or Login (returning)
+
+### Register — new account
+
+```
+POST http://127.0.0.1:5000/auth/register
+Headers: Content-Type: application/json
+
+Body (raw JSON):
+{
+  "email": "test@example.com",
+  "password": "CorrectHorseBattery1"
+}
+```
+
+Response `201`:
+```json
+{ "user": { "id": "...", "email": "test@example.com" }, "token": "eyJ..." }
+```
+
+Error cases: `400` if the email is invalid or the password is under 8 characters; `409` if that email is already registered — use Login instead in that case.
+
+### Login — existing account
 
 ```
 POST http://127.0.0.1:5000/auth/login
@@ -85,9 +107,9 @@ Response `200`:
 { "user": { "id": "...", "email": "test@example.com" }, "token": "eyJ..." }
 ```
 
-Copy the `token` value — **without the surrounding quotes**.
+Error case: `401` on wrong email/password.
 
-(If this is a brand new email, use `POST /auth/register` instead — same body shape, returns `201`.)
+Either way, copy the `token` value — **without the surrounding quotes**.
 
 ## 2. Upload a file (create a note)
 
