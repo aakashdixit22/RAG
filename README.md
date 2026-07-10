@@ -176,4 +176,5 @@ Response `200`:
 ```
 
 ## Trade-off
-Retrieval is brute-force cosine similarity over each note's chunks held in Mongo — no vector index — which is simple and fast enough per-note but wouldn't scale past a note with thousands of chunks. 
+
+- **Storage vs. retrieval speed**: embeddings are stored as a plain field in MongoDB instead of a dedicated vector DB — zero extra infrastructure to set up, but retrieval means fetching *every* chunk's embedding for a note and comparing it against the query one by one in Python (no index), which is fine at small scale but doesn't stay fast as chunk count grows into the thousands.
