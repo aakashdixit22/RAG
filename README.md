@@ -174,3 +174,8 @@ Response `200`:
   ]
 }
 ```
+
+## Design notes
+
+1) Embeddings run locally via `sentence-transformers` so there's no per-chunk API cost or latency, while generation is delegated to Gemini since local generation quality/speed wouldn't be competitive. 
+2)Retrieval is brute-force cosine similarity over each note's chunks held in Mongo — no vector index — which is simple and fast enough per-note but wouldn't scale past a note with thousands of chunks. 

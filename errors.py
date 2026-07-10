@@ -1,9 +1,3 @@
-"""Custom API exceptions and centralized error-response handling.
-
-Every error the API returns (expected or not) is shaped as:
-    {"error": {"message": "..."}}
-so clients never have to special-case a raw stack trace or an HTML 500 page.
-"""
 
 
 class APIError(Exception):
