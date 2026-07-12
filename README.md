@@ -175,6 +175,44 @@ Response `200`:
 }
 ```
 
+## 4. List all your notes
+
+```
+GET http://127.0.0.1:5000/notes
+Headers: Authorization: Bearer <same token as step 2>
+```
+
+No body needed — in Postman just set the method dropdown to `GET`, paste the URL, and add the header.
+
+Response `200` — newest first, each entry is a summary (a 200-char `preview` instead of full `content`/`extracted_text`):
+```json
+{
+  "notes": [
+    { "id": "6a50a03e9041401ecb69a103", "title": "My Resume", "file_name": "sample.txt", "has_file": true, "chunk_count": 1, "preview": "...", "created_at": "...", "updated_at": "..." }
+  ]
+}
+```
+
+## 5. Retrieve a single note
+
+```
+GET http://127.0.0.1:5000/notes/<note_id>
+Headers: Authorization: Bearer <same token as step 2>
+```
+
+Response `200` — full detail this time, including `content` and `extracted_text` (not just the preview from step 4).
+
+Error case: `404 "Note not found"` if the `note_id` doesn't exist, is malformed, or belongs to a different user — ownership is never revealed, it looks identical to a missing note.
+
+## 6. Delete a note
+
+```
+DELETE http://127.0.0.1:5000/notes/<note_id>
+Headers: Authorization: Bearer <same token as step 2>
+```
+
+Response `204 No Content` on success (also deletes the note's uploaded file from disk, if any). Same `404` error case as step 5 applies, and deleting an already-deleted note 404s too — it's not idempotent-200.
+
 ## Trade-off
 
 - **Storage vs. retrieval speed**: embeddings are stored as a plain field in MongoDB instead of a dedicated vector DB — zero extra infrastructure to set up, but retrieval means fetching *every* chunk's embedding for a note and comparing it against the query one by one in Python (no index), which is fine at small scale but doesn't stay fast as chunk count grows into the thousands.
